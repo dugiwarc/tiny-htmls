@@ -1,0 +1,70 @@
+.fuzz {
+  position: relative;
+}
+
+.fuzz > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.fuzz:hover {
+  opacity: 0.5;
+}
+
+.fuzz:hover > * {
+  animation: fuzzAnim 3s linear infinite;
+}
+
+.fuzz.red {
+  color: red;
+}
+.fuzz.red > * {
+  text-shadow: 0 0 15px red;
+}
+.fuzz.blue {
+  color: blue;
+}
+.fuzz.blue > * {
+  text-shadow: 0 0 15px blue;
+}
+
+@keyframes fuzzAnim {
+  0% {
+    margin: 0;
+    opacity: 0;
+  }
+  1% {
+    margin-left: 0.5em;
+    opacity: 1;
+  }
+  25% {
+    margin-left: 0.5em;
+    opacity: 0;
+  }
+  26% {
+    margin: 0;
+    opacity: 0;
+  }
+  50% {
+    margin-top: 0;
+    opacity: 0;
+  }
+  51% {
+    margin-top: 0.25em;
+    opacity: 1;
+  }
+  75% {
+    margin-top: 0.25em;
+    opacity: 1;
+  }
+  76% {
+    margin-top: 0;
+    opacity: 0;
+  }
+  100% {
+    margin: 0;
+  }
+}

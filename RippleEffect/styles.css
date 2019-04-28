@@ -1,0 +1,47 @@
+body {
+  background: black;
+  background-size: cover;
+}
+
+.ripple {
+  position: relative;
+  background: transparent
+    radial-gradient(
+      circle,
+      transparent 1%,
+      rgba(255, 255, 255, 0.5) 10%,
+      transparent 1%
+    )
+    center;
+  background-size: 2000%;
+  background-position: center;
+  transition: background 5s, opacity 5s;
+  font-size: 1em;
+  opacity: 0.75;
+  color: #fff;
+}
+
+.ripple:hover {
+  opacity: 1;
+}
+
+.ripple:active {
+  background-size: 0;
+  transition: 0s;
+  opacity: 0.25;
+}
+
+.big {
+  font-size: 2em;
+}
+.red {
+  color: red;
+}
+.shadow {
+  text-shadow: 2px 2px 2px black;
+}
+
+button {
+  border: 0.1mm solid;
+  padding: 1em;
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./todocss.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="todoM">
+        <ul id="mother_of_elements">
+                
+        </ul>
+        <input type="text" name="" id="text" placeholder=" + New Item">
+        <input type="submit" name="" value="Add" id="submit">
+        <input type="submit" value="Save list" id="save">
+        <input type="submit" value="Load list" id="load">
+        <input type="submit" value="Clear" id="clearCurrent">
+        <input type="submit" value="Clear Saved" id="clearSaved">
+
+
+        
+    </div>
+
+<script>
+
+    var items = JSON.parse(localStorage.getItem('tacheObj')) || []
+    var current = JSON.parse(localStorage.getItem('unsavedT')) || []
+
+    $("#mother_of_elements").on('click', 'li', function(event){
+        $(this).toggleClass('done')
+    })
+
+    $("#submit").click(function(event) {
+        event.preventDefault()
+        if($("#text").val().length > 0)
+        {
+            let $new_element = document.createElement('li')
+            $new_element.className = "elements"
+            $new_element.innerText = $("#text").val()
+            $("#mother_of_elements").append($new_element)
+            let tache = Object.create(ListItem)
+            tache.text = $("#text").val()
+            tache.isDone = false
+            current.push(tache)
+            localStorage.setItem('unsavedT', JSON.stringify(current))
+            $("#text").val("")
+        }
+        else 
+        {
+            console.log("You must insert something")
+        }
+    })
+    
+    const ListItem = {
+        text: "",
+        isDone: false
+    } 
+
+    $("#save").click(function(event) {
+        event.preventDefault()
+        localStorage.removeItem('tacheObj')
+        localStorage.removeItem('unsavedT')
+        $(".elements").each(function(){
+            
+            let tache = Object.create(ListItem)
+            
+            tache.text = $(this).text().trim()
+
+            if($(this).hasClass('done'))
+                tache.isDone = true
+            else
+                tache.isDone = false
+
+            items.push(tache)
+        })
+        localStorage.setItem('tacheObj', JSON.stringify(items))
+        localStorage.setItem('unsavedT', JSON.stringify(items))
+
+    })
+
+    $("#load").click(function() {
+
+        $("#mother_of_elements").empty()
+        localStorage.setItem('unsavedT', JSON.stringify(items))
+        items.forEach(element => {
+            let $new_element = document.createElement('li')
+            $new_element.className = "elements"
+            if(element.isDone)
+                $new_element.classList.add("done")
+            $new_element.innerText = element.text
+            $("#mother_of_elements").append($new_element)
+        })
+    })
+
+    
+    $("#clearSaved").click(function() {
+        $("#mother_of_elements").empty()
+        localStorage.removeItem('tacheObj')
+        items = []
+    })
+    
+    $("#clearCurrent").click(function() {
+        $("#mother_of_elements").empty()
+        localStorage.removeItem('unsavedT')
+        current = []
+    })
+
+    function populateList(list = []) {
+        list.forEach(element => {
+            let $element = document.createElement('li')
+            $element.className = "elements"
+            if(element.isDone)
+                $element.classList.add("done")
+            $element.innerText = element.text
+            $("#mother_of_elements").append($element)
+        })
+    }
+
+    populateList(current)
+</script>
+</body>
+</html>

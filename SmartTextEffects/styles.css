@@ -1,0 +1,36 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.wrapper {
+  display: grid;
+  height: 100%;
+}
+
+.word {
+  font-size: 3em;
+  margin: auto auto;
+}
+
+.word .up {
+  display: inline-block;
+  transform: translate3d(0px, 0px, 0px) rotate(0deg);
+  transition: all 0.5s ease-in-out;
+}
+
+.word .down {
+  display: inline-block;
+  transform: translate3d(0px, 0px, 0px) rotate(0deg);
+  transition: all 0.5s ease-in-out;
+}
+
+.word:hover .up {
+  transform: translate3d(0px, -6px, 0px) rotate(2deg);
+}
+
+.word:hover .down {
+  transform: translate3d(0px, 6px, 0px) rotate(-2deg);
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3D Box Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="box">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('mousemove', function (e) {
+            var x = 10 + (e.clientX / 20)
+            if (x > 49) x = 49
+            if (x < 35) x = 35
+            var y = 20 + (e.clientY / 30)
+            if (y > 50) y = 38
+            if (y < 20) y = 20
+
+            var translate = [
+                'translateZ(26vw)',
+                'translateX(' + x + 'vw)',
+                'translateY(' + y + 'vh)'
+            ]
+            var boxNode = document.querySelector('.box')
+            boxNode.style.transform = translate.join(' ')
+        })
+    </script>
+</body>
+
+</html>

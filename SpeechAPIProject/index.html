@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://fonts.googgleapis.com/css?family=Noto+Serif">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>Product reviews</h1>
+    <div id="reviews"></div>
+
+    <div id="wrapper">
+        <span id="unsupported" class="support hidden">Speech API Not Supported</span>
+        <h2>Your Message:</h2>
+    </div>
+    <div id="typeOfInput">
+        <span>Results:</span>
+        <label>
+            <input type="radio" name="recognition-type" value="final">
+            Final speech
+        </label>
+        <label>
+            <input type="radio" name="recognition-type" value="interim" checked>
+            As you speak
+        </label>
+    </div>
+    <textarea name="" id="transcription" readonly></textarea>
+    <br />
+    <button id="clear-all" class="button">Clear Text</button>
+    <button id="submit" class="button">Submit Review</button>
+    <div class="button-wrapper">
+        <div id="speechButton" class="start"></div>
+        <div id="log">Click to start speaking</div>
+    </div>
+
+    <script>
+        var submit = document.getElementById('submit')
+        var review = document.getElementById('reviews')
+        var transcription = document.getElementById('transcription')
+        var log = document.getElementById('log')
+        var start = document.getElementById('speechButton')
+        var clear = document.getElementById('clear-all')
+        var speaking = false
+
+        submit.addEventListener('click', function () {
+            let p = document.createElement('p')
+            var textNode = document.createTextNode(transcription.value)
+            p.appendChild(textNode)
+            review.appendChild(p)
+            let today = new Date()
+            let s = document.createElement('small')
+            textNode = document.createTextNode(today)
+            s.appendChild(textNode)
+            review.appendChild(s)
+            let hr = document.createElement('hr')
+            review.appendChild(hr)
+            transcription.textContent = ""
+        })
+
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null
+        if (windowSpeechRecognition === null) {
+            document.getElementById('unsupported').classList.remove('hidden')
+            start.classList.add('hidden')
+        } else {
+            var recognizer = new window.SpeechRecognition()
+            recognizer.continuous = true
+            recognizer.onresult = function (event) {
+                transcription.textContent = ""
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        transcription.textContent = event.results[i][0].transcript
+                    } else {
+                        transcription.textContent += event.results[i][0].transcript
+                    }
+                }
+            }
+
+            recognizer.onerror = function (event) {
+                log.innerHTML = "Recognition error: " + event.message + "<br />" + log.innerHTML
+            }
+
+            start.addEventListener('click', function () {
+                if (!speaking) {
+                    speaking = true
+                    start.classList.toggle('stop')
+                    recognizer.interimResults = document.querySelector('input[name="recognition-type"][value="interim"]').checked
+                    try {
+                        recognizer.start()
+                        log.innerHTML = "Start speaking now<br />Click to stop"
+                    }
+                    catch (ex) {
+                        log.innerHTML = "Recognition error:<br/>" + ex.message
+                    }
+                } else {
+                    recognizer.stop()
+                    start.classList.toggle('stop')
+                    log.innerHTML = "Recognition stopped <br/> Click to speak"
+                    speaking = false
+                }
+            })
+            clear.addEventListener('click', function () {
+                transcription.textContent = ""
+            })
+        }
+    </script>
+</body>
+
+</html>
